@@ -1,4 +1,11 @@
 @echo off
+openfiles >nul 2>&1
+if %errorlevel% neq 0 (
+    :: If not running as Administrator, re-launch the script with Administrator privileges
+    powershell -Command "Start-Process cmd -ArgumentList '/c %~s0 %*' -Verb runAs"
+    exit
+)
+
 :: This script will create a scheduled task to run a specific bat script on system boot
 set script_path="%~dp0disableVanguard.bat"
 
