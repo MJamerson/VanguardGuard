@@ -2,20 +2,27 @@
 setlocal
 
 set SERVICE_NAME=vgc
+set SKIP_SERV=0
 
 call :checkServiceExists
-call :getServiceStartType
-call :setServiceStartType
-call :getServiceStartType
-call :validateServiceStartType
+if SKIP_SERV equ 1 (
+	call :getServiceStartType
+	call :setServiceStartType
+	call :getServiceStartType
+	call :validateServiceStartType
+)
 
 set SERVICE_NAME=vgk
 
 call :checkServiceExists
-call :getServiceStartType
-call :setServiceStartType
-call :getServiceStartType
-call :validateServiceStartType
+if SKIP_SERV equ 1 (
+	call :getServiceStartType
+	call :setServiceStartType
+	call :getServiceStartType
+	call :validateServiceStartType
+)
+
+goto :end
 
 
 :checkServiceExists
@@ -23,8 +30,10 @@ call :validateServiceStartType
     sc qc "%SERVICE_NAME%" >nul 2>&1
     if %errorlevel% neq 0 (
         echo Service "%SERVICE_NAME%" does not exist.
-        goto end
-    )
+        set SKIP_SERV=1
+    ) else (
+		set SKIP_SERV=0
+	)
 goto :eof
 
 :getServiceStartType
@@ -62,8 +71,7 @@ goto :eof
     echo Error: Failed to disable service %SERVICE_NAME%. Please check permissions.
     cscript //nologo "%temp%\alert.vbs"
     del "%temp%\alert.vbs"
-    pause
-goto :end
+    exit
 
 
 :end
