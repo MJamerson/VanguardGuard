@@ -12,7 +12,7 @@ set SKIP_SERV=0
 set SERVICE_NAME=vgc
 
 call :checkServiceExists
-if SKIP_SERV equ 1 (
+if %SKIP_SERV% equ 0 (
 	call :getServiceStartType
 	call :setServiceStartType
 	call :getServiceStartType
@@ -22,7 +22,7 @@ if SKIP_SERV equ 1 (
 set SERVICE_NAME=vgk
 
 call :checkServiceExists
-if SKIP_SERV equ 1 (
+if %SKIP_SERV% equ 0 (
 	call :getServiceStartType
 	call :setServiceStartType
 	call :getServiceStartType
