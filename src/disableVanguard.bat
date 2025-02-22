@@ -1,8 +1,16 @@
 @echo off
 setlocal
 
-set SERVICE_NAME=vgc
+openfiles >nul 2>&1
+if %errorlevel% neq 0 (
+    :: If not running as Administrator, re-launch the script with Administrator privileges
+    echo This script requires Administrator privileges. Restarting with elevated permissions...
+    powershell -Command "Start-Process cmd -ArgumentList '/c %~s0 %*' -Verb runAs"
+    exit
+)
+
 set SKIP_SERV=0
+set SERVICE_NAME=vgc
 
 call :checkServiceExists
 if SKIP_SERV equ 1 (

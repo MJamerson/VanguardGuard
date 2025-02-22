@@ -1,6 +1,14 @@
 @echo off
 setlocal
 
+openfiles >nul 2>&1
+if %errorlevel% neq 0 (
+    :: If not running as Administrator, re-launch the script with Administrator privileges
+    echo This script requires Administrator privileges. Restarting with elevated permissions...
+    powershell -Command "Start-Process cmd -ArgumentList '/c %~s0 %*' -Verb runAs"
+    exit
+)
+
 call :confirmRun
 if "%userChoice%"=="No" (
 	exit /b 1
@@ -67,7 +75,6 @@ goto :eof
     echo Error: Failed to enable service %SERVICE_NAME%. Please check permissions.
     cscript //nologo "%temp%\alert.vbs"
     del "%temp%\alert.vbs"
-    pause
 goto :end
 
 :confirmRun
