@@ -55,12 +55,12 @@ goto :eof
 goto :eof
 
 :setServiceStartType
-    echo "%START_TYPE%"|findstr /i "AUTO"
-    if %errorlevel% equ 0 (
-        echo The service "%SERVICE_NAME%" is set to Automatic. Changing to Disabled...
+    echo "%START_TYPE%"|findstr /i "DISABLED"
+    if %errorlevel% neq 0 (
+        echo The service "%SERVICE_NAME%" is not set to Disabled. Changing to Disabled...
         sc config "%SERVICE_NAME%" start= disabled
     ) else (
-        echo The service "%SERVICE_NAME%" is not set to Automatic. No changes made.
+        echo The service "%SERVICE_NAME%" is set to Disabled. No changes made.
     )
 goto :eof
 
